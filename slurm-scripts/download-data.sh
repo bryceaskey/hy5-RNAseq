@@ -13,7 +13,7 @@ pwd; hostname; date
 
 module load sra/2.10.4
 
-echo "Downloading arabidopsis RNA seq data"
+echo 'Downloading arabidopsis RNA seq data'
 
 dest=/ufrc/jkim6/share/braskey/data/PRJNA549285/
 
