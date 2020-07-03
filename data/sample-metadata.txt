@@ -1,0 +1,13 @@
+SRA.number,genotype,treatment
+SRR9313209,Col.0,dark.3.days
+SRR9313210,Col.0,dark.3.days
+SRR9313211,Col.0,dark.3.days
+SRR9313212,hy5,dark.3.days
+SRR9313213,hy5,dark.3.days
+SRR9313214,hy5,dark.3.days
+SRR9313223,Col.0,dark.3.days_light.1.5.hrs
+SRR9313224,Col.0,dark.3.days_light.1.5.hrs
+SRR9313225,Col.0,dark.3.days_light.1.5.hrs
+SRR9313226,hy5,dark.3.days_light.1.5.hrs
+SRR9313227,hy5,dark.3.days_light.1.5.hrs
+SRR9313228,hy5,dark.3.days_light.1.5.hrs

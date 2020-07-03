@@ -21,20 +21,20 @@ reads=/ufrc/jkim6/share/braskey/data/PRJNA549285/
 aln=/ufrc/jkim6/share/braskey/data/PRJNA549285/TopHat/
 
 # Fix chromosome naming in TAIR10.fa to match TAIR10.gff
-sed -i 's|1 CHROMOSOME dumped from ADB: Feb/3/09 16:9; last updated: 2009-02-02|Chr1|g' ${ref}TAIR10.fa
-sed -i 's|2 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr2|g' ${ref}TAIR10.fa
-sed -i 's|3 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr3|g' ${ref}TAIR10.fa
-sed -i 's|4 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr4|g' ${ref}TAIR10.fa
-sed -i 's|5 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr5|g' ${ref}TAIR10.fa
-sed -i 's|mitochondria CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2005-06-03|ChrM|g' ${ref}TAIR10.fa
-sed -i 's|chloroplast CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2005-06-03|ChrC|g' ${ref}TAIR10.fa
+#sed -i 's|1 CHROMOSOME dumped from ADB: Feb/3/09 16:9; last updated: 2009-02-02|Chr1|g' ${ref}TAIR10.fa
+#sed -i 's|2 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr2|g' ${ref}TAIR10.fa
+#sed -i 's|3 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr3|g' ${ref}TAIR10.fa
+#sed -i 's|4 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr4|g' ${ref}TAIR10.fa
+#sed -i 's|5 CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2009-02-02|Chr5|g' ${ref}TAIR10.fa
+#sed -i 's|mitochondria CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2005-06-03|ChrM|g' ${ref}TAIR10.fa
+#sed -i 's|chloroplast CHROMOSOME dumped from ADB: Feb/3/09 16:10; last updated: 2005-06-03|ChrC|g' ${ref}TAIR10.fa
 
 # Copy reference and annotation files into index folder, and generate index
-cp ${ref}TAIR10.fa ${index}
-cp ${ref}TAIR10.gff ${index}
-bowtie2-build ${index}TAIR10.fa ${index}TAIR10
+#cp ${ref}TAIR10.fa ${index}
+#cp ${ref}TAIR10.gff ${index}
+#bowtie2-build ${index}TAIR10.fa ${index}TAIR10
 
-for id in SRR9313209 SRR9313210 SRR9313211 SRR9313212 SRR9313213 SRR9313214 SRR9313223 SRR9313224 SRR9313225 SRR9313226 SRR9313227 SRR9313228
+for id in SRR9313224 SRR9313225 SRR9313226 SRR9313227 SRR9313228
 do
   # Apply trimmomatic to remove adapter sequences and filter low quality reads
   trimmomatic SE -threads 1 \
