@@ -1,7 +1,7 @@
 # Differential gene expression analysis using edgeR package
 # Goal - perform pairwise comparisons of expression data for Col-0 and hy5 genotypes
 
-# Install and load packages, and set working directory ----
+# Install and load packages, and set working directory
 #if (!requireNamespace("BiocManager", quietly = TRUE))
 #  install.packages("BiocManager")
 #BiocManager::install("edgeR")
@@ -9,31 +9,31 @@
 library(edgeR)
 library(dplyr)
 
-setwd("C:/Users/Bryce/Documents/hy5-RNAseq/")
+setwd("C:/Users/bca08_000/Documents/hy5-RNAseq/")
 
-
-# Load sample metadata ----
+# Load sample metadata
 metadata <- read.delim("data/sample-metadata.txt", sep=",")
 metadata$genotype <- factor(metadata$genotype)
 metadata$treatment <- factor(metadata$treatment)
 
-# For each sample, sum expression data for different transcripts of the same gene together ----
-# Use SRA-number in metadata to loop through each transcript-counts file
-for(SRA.number in metadata$SRA.number){
-  transcript.expression <- read.delim(paste("data/", SRA.number, "_transcript-counts.txt", sep=""), header=FALSE)
-  colnames(transcript.expression) <- c("transcript.id", "count")
-  
-  # Create new column with just gene id
-  transcript.expression$gene.id <- sapply(strsplit(transcript.expression$transcript.id, split="[.]"), "[", 1)
-  transcript.expression$gene.id <- factor(transcript.expression$gene.id)
-  
-  # Sum together all transcript counts for each unique gene id to get gene counts
-  # ex: AT1G01080.1 and AT1G01080.2 should be summed together as AT1G01080
-  gene.expression <- transcript.expression %>%
-    group_by(gene.id) %>%
-    summarize(count=sum(count))
-  
-  
-}
+# Load gene expression data
+expressionData <- readDGE(paste(getwd(), "/data/featureCounts/", dir("data/featureCounts/"), sep=""),
+  labels=sapply(strsplit(dir("data/featureCounts/"), "_"), `[`, 1),
+  group=c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4))
+expressionData$genes <- read.delim("data/gene-lengths.txt", row.names=1)
 
-#read.delim()
+# Only keep genes with cpm > 1 in at least two samples
+keep <- rowSums(cpm(expressionData) > 1) >= 2
+expressionData <- expressionData[keep, ]
+expressionData$samples$lib.size <- colSums(expressionData$counts)
+
+# Normalize for library size
+expressionData <- calcNormFactors(expressionData)
+
+# Create MDS plot to verify integrity of RNAseq data
+plotMDS(expressionData, method="bcv")
+
+# Calculate RPKM values, export as a .csv
+rpkm <- rpkm(expressionData$counts, gene.length=expressionData$genes$Length, normalized.lib.sizes=TRUE, log=FALSE)
+write.csv(rpkm, file="data/rpkm.csv")
+write.csv(metaData, file="data/metadata.csv")

@@ -34,7 +34,7 @@ aln=/ufrc/jkim6/share/braskey/data/PRJNA549285/TopHat/
 #cp ${ref}TAIR10.gff ${index}
 #bowtie2-build ${index}TAIR10.fa ${index}TAIR10
 
-for id in SRR9313210
+for id in SRR9313213
 do
   # Apply trimmomatic to remove adapter sequences and filter low quality reads
   #trimmomatic SE -threads 1 \
