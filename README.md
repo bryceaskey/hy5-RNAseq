@@ -1,14 +1,14 @@
 # hy5-RNAseq
 This repository contains scripts used in the processing of an *Arabidopsis thaliana* RNAseq data from PRJNA549285. The goal of this project is to identify differentially expressed genes between the Col-0 and *hy5* genotypes in 2 different environmental conditions.
 
-## Datasets used:
+## Datasets:
 #### PRJNA549285 RNAseq data
 Burko, Y., Seluzicki, A., Zander, M., Pedmale, U.V., Ecker, J.R., and Chory, J. (2020). Chimeric Activators and Repressors Define HY5 Activity and Reveal a Light-Regulated Feedback Mechanism. *Plant Cell*. 32, 967-983.
 
 #### TAIR10 reference genome and annotations
 Lamesch, P., Berardini, T.Z, Li, D., Swarbreck, D., Wilks, C., Sasidharan, R., Muller, R., Dreher, K., Alexander, D.L., Garcia-Hernandez, M., Karthikeyan, A.S., Lee, C.H., Nelson, W.D., Ploetz, L., Singh, S., Wensel, A., and Huala, E. (2011). The Arabidopsis Information Resource (TAIR): improved gene annotation and new tools. *Nucleic Acids Research*  40(Database issue), D1202–D1210.
 
-## Software tools used:
+## Software tools:
 #### SRA Toolkit 2.10.4
 Leinonen, R., Sugawara, H., Shumway, M., & International Nucleotide Sequence Database Collaboration (2011). The sequence read archive. *Nucleic Acids Research*. 39(Database issue), D19–D21.
 
