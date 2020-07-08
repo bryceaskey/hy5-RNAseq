@@ -24,20 +24,23 @@ Liao, Y., Smyth, G.K., and Shi, W. (2014). featureCounts: an efficient general-p
 #### Samtools 1.10
 Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth, G., Abecasis, G., and Durbin, R. (2009). The Sequence Alignment/Map format and SAMtools. *Bioinformatics*. 25(16), 2078-2079.
 
-# Bioinformatics analysis
+# Setting up a RNAseq analysis pipeline in hipergator
 The documentation in this section details the bioinformatics approaches and methods applied in this project. Ideally, the documentation here should allow someone with little to no bioinformatics experience to understand and recreate the analysis method that was used. 
 
-Topics covered:
+#### Topics covered:
 1. [Setting up a hipergator account](#setting-up-hipergator) \
    1.1 [SSH setup](#SSH-setup) \
    1.2 [SFTP setup](#SFTP-setup) 
-2. [Submitting jobs in hipergator](#submitting-jobs) \
-   2.1 [SLURM scripts](#slurm-scripts) \
-   2.2 [Bash basics](#bash-basics) \
-   2.3 [Output files](#output-files)
-3. [Downloading datasets](#downloading-datasets) \
-   3.1 [Loading the SRA tookit](#loading-sra-toolkit) \
-   3.2 [Configuring the SRA toolkit](#configuring-sra-toolkit)
+2. [Basic bash commands](#basic-bash-commands) \
+   2.1 [General commands](#general-commands) \
+   2.2 [Hipergator-specific commands](#hipergator-specific-commands) 
+3. [Using hipergator](#using-hipergator) \
+   3.1 [Loading modules](#loading-modules) \
+   3.2 [Configuring modules](#configuring-modules) \
+   3.3 [Anatomy of a SLURM script](#slurm-script) \
+   3.4 [Running a slurm script](#running-slurm-script) \
+   3.5 [Checking outputs](#checking-outputs)
+4. [A model RNAseq analysis pipeline](#model-pipeline)
 
 <a name="setting-up-hipergator"></a>
 ## 1. Setting up a hipergator account
@@ -114,24 +117,47 @@ You can upload files to hipergator by selecting and dragging them from your comp
 
 **IMPORTANT -** MobaXTerm/FileZilla will by default connect to your home directory in hipergator. For my account, this is ```/home/braskey/```. This home directory has limited space, and is slow to read/write to. **All code and data files should instead be saved under your ufrc directory.** If your hipergator account has been successfully created, this directory will be ```/ufrc/group-name/gatorlink-username/```. For example, my ufrc directory in the lee group is ```/ufrc/lee/braskey/```. You can change directories in MobaXTerm/FileZilla by typing your desired directory in the address bar above where the filesystem is displayed, and pressing enter.
 
-<a name="submitting-jobs"></a>
-## 2. Submitting jobs in hipergator
+<a name="basic-bash-commands"></a>
+## 2. Basic bash commands
+Below is a list of some of the bash commands that I use most often. These commands are used by entering them on the SSH command line, or by including them in a SLURM script. The use of each of these commands will be demonstrated later, so don't worry about trying to memorize each of them. 
 
-<a name="slurm-scripts"></a>
-### 2.1 SLURM scipts
+<a name="general-commands"></a>
+### 2.1 General commands
+```pwd``` - prints the current working directory. 
 
-<a name="bash-basics"></a>
-### 2.2 Bash basics
+```cd /a/directory/``` - changes the current working directory to that specified. Absolute paths begin with a "/", but relative paths do not. Also, ".." is the command to move up 1 directory level.
 
-<a name="output-files"></a>
-### 2.3 Output files
+```ls``` - lists all files and folders contained by the current working directory.
 
-<a name="downloading-datasets"></a>
-## 3. Downloading datasets
+```cp file.txt a/copy/of/file.txt``` - copies a file (or folder) from one directory to another. *Can be any file format, not just .txt*
+
+```mv file.txt new/location/of/file.txt``` - moves a file (or folder) from one directory to another. *Can be any file format, not just .txt*
+
+```head -n 50 file.txt``` - prints the first 50 (or any number following -n) lines of a file. Very useful for checking very large files. *Can be any file format, not just .txt*
+
+```tail``` - prints the last 50 (or any number following -n) lines of a file. Very useful for checking very large files. *Can be any file format, not just .txt*
+
+<a name="hipergator-specific-commands"></a>
+### 2.2 Hipergator-specific commands
+```module spider module-name``` - returns information about all modules with names which partially match "module-name".
+
+```module load module-name/module-version``` - loads a module into the environment.
+
+```sbatch a-slurm-file.sh``` - submits a SLURM script to hipergator.
+
+```squeue -u gatorlink-username``` - prints a list of all jobs currently running which were submitted by the specified user.
+
+```scancel job-id``` - cancels a submitted job. The job-id of a job can be found with the ```squeue``` command.
+
+<a name="using-hipergator"></a>
+## 3. Using hipergator
+
+<a name="loading-modules"></a>
+### 3.1 Loading modules
+In hipergator, a module is a set of software tools which can be used to complete specific tasks (e.g. downloading datasets, mapping/alignment). Hipergator has a large number of modules already installed, which can be [viewed here](https://help.rc.ufl.edu/doc/Applications). Any of these modules can be simply loaded into your current session with the commands ```module spider``` and ```module load```. The use of these commands is demonstrated with the SRA toolkit module.
+
 Most datasets available in the NCBI Sequencing Read Archive (SRA) can be downloaded directly into hipergator. This is much faster than downloading the dataset onto your own computer, and then uploading it from your own computer to hipergator. Downloading data directly into hipergator is done with the **SRA toolkit**.
 
-<a name="loading-sra-tookit"></a>
-### 3.1 Loading the SRA toolkit
 To load the SRA toolkit, first check which version are available on hipergator with the ```module spider``` command. On the SSH command line, type the command ```module spider sra```, and press enter. You should see an output similar to that shown below.
 
 ```
@@ -205,6 +231,129 @@ The ```module spider``` command returns information about all modules with names
 
 From this output, I see that I can load the SRA toolkit with the command ```module load sra/2.10.4```. Entering this command doesn't generate any visible output, but it loads the SRA toolkit module into my current session, and makes it available for me to use.
 
-<a name="configuring-sra-tookit"></a>
-### 3.2 Configuring the SRA toolkit
-If this is the first time you are using the SRA toolkit from your hipergator account, it must first be configured. 
+<a name="configuring-modules"></a>
+### 3.2 Configuring modules
+Some modules in hipergator require configuration before they can be used. This configuration only needs to be completed the first time that you use the module from your hipergator account. Of the modules used in this workflow, the SRA toolkit is the only one which requires configuration prior to use. 
+
+#### Configuration of the SRA tookit:
+
+First, using the SFTP client, create an empty folder in your ufrc directory called "sra-cache". For example, for my account with the lee group, the path to this folder is ```/ufrc/lee/braskey/sra-cache```.
+
+In the SSH client, after loading the SRA toolkit module into your current session, enter the command ```vdb-config -i``` on the command line. This will launch the SRA configuation tool. In the tool, scroll through options with the "tab" key, and select with the "enter" key. 
+
+Here are the settings that need to be changed in the configuation tool:
+1) On the "Main" tab, check the "Enable Remote Access" box.
+
+![Image of SRA configuration tool - setting to enable remote access is checked](doc-images/sra-config-remote-access.png)
+
+*SRA configuation tool with "Enable Remote Access" setting checked.*
+
+2) On the "Cache" tab, check the "enable local file-caching" box, and set "location of user-repository" to the "sra-cache" folder you created in your ufrc directory.
+
+![Image of SRA configuration tool - setting to enable local file-caching is checked, and location of user-repository is set](doc-images/sra-config-cache.png)
+
+*SRA configuation tool with "enable local file-caching" setting checked, and "location of user-repository" set to an empty folder in my ufrc directory.*
+
+Save the configuration, and exit the configuration tool. The SRA toolkit should now be ready for use!
+
+<a name="slurm-script"></a>
+### 3.3 Anatomy of a SLURM script
+Although some commands can be entered directly on the SSH command line, it's best to use a SLURM script to complete more complex tasks. An explanation of the various parts of a SLURM script is provided below, continuing with the example of the SRA toolkit.
+
+To use the SRA toolkit to download RNAseq datasets, we will create a SLURM scripts to call the necessary commands. A SLURM script is essentially just a code file which contains some additional information needed by hipergator. SLURM scripts are written in the **bash** language, and end with ".sh".
+
+An example of a SLURM script that uses the SRA toolkit module to download RNAseq data is shown below:
+
+```
+#!/bin/bash
+#SBATCH --job-name=download-data        # Job name
+#SBATCH --mail-type=END,FAIL            # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-user=braskey@ufl.edu     # Where to send mail	
+#SBATCH --account=jkim6                 # Group providing CPU and memory resources
+#SBATCH --qos=jkim6                     # QOS to run job on (investment or burst)
+#SBATCH --ntasks=1                      # Number of CPU cores to use
+#SBATCH --mem=1gb                       # Job memory request
+#SBATCH --time=24:00:00                 # Time limit hrs:min:sec (max is 744:00:00)
+#SBATCH --output=download-data_%j.log   # Standard output and error log
+
+pwd; hostname; date
+
+module load sra/2.10.4
+
+echo 'Downloading RNA seq data from PRJNA549285'
+
+dest=/ufrc/jkim6/share/braskey/data/PRJNA549285/
+
+# Col-0, dark 3 days + light 1.5 hrs
+fastq-dump SRR9313223 -O ${dest} 
+```
+
+```#SBATCH``` lines are used by hipergator to determine how exactly to run your job. Most importantly, they describe how many resources to allocate to the job. These lines also contain information about the name of the job, the email address to send messages to regarding the job's status, and the name of the log file which will be generated. 
+
+```pwd; hostname; date``` prints the current working directory, name of the host, and date to the log file generated by the script. This information is useful for bookkeeping purposes.
+
+```module load sra/2.10.4``` loads version 2.10.4 of the SRA toolkit into the environment.
+
+```echo 'Downloading RNA seq data from PRJNA549285'``` prints "Downloading RNA seq data from PRJNA549285"  to the log file generated by the script.
+
+```dest=/ufrc/jkim6/share/braskey/data/PRJNA549285``` creates a variable called "dest", and assigns it the value of the specified directory.
+
+```# Col-0, dark 3 days + light 1.5 hrs``` is a comment. In bash, comments begin with a "#", and are not read by hipergator while running. They are useful for describing what commands do. In this case, I use a comment to describe the sample which I'm downloading data for.
+
+```fastq-dump SRR9313223 -O ${dest}``` is a function from the SRA toolkit which downloads RNAseq data for the specific SRR number. In this case, I want to download data for SRR9313223. The function also allows me to specify the directory in which to download the data with the ```-O``` option. I select the directory which I specified previously in the ```dest``` variable. I tell hipergator to interpret ```dest``` as a variable by adding a ```$``` in front, and wrapping it in ```{}```.
+
+<a name="running-slurm-script"></a>
+### 3.4 Running a SLURM script
+To run a SLURM script as a job, the script first needs to be uploaded into your ufrc directory in hipergator. This is most easily done with an SFTP. 
+
+After the script has been uploaded, it must be submitted to hipergator using an SSH. First, navigate to the directory which contains the SLURM script in the SSH using the ```cd``` command, followed by the path to the directory containing the SLURM script. Check that you are in the correct directory by printing a list of all files in the directory with the ```ls``` command. Submit the job with the ```sbatch``` command, followed by the name of the name of SLURM script. You can check the status of the job with the ```squeue -u``` command, followed by your gatorlink username.
+
+For example, to submit a SLURM script named ```download-data.sh``` that I uploaded to ```/ufrc/jkim6/share/braskey/slurm-scripts/```, I would enter the commands below:
+
+```
+[braskey@login4 ~]$ cd /ufrc/jkim6/share/braskey/slurm-scripts/
+[braskey@login4 slurm-scripts]$ ls
+download-data.sh                        
+[braskey@login4 slurm-scripts]$ sbatch download-data.sh
+Submitted batch job 55014474
+[braskey@login4 slurm-scripts]$ squeue -u braskey
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          55014474 hpg2-comp download  braskey  R       0:05      1 c29a-s1
+[braskey@login4 slurm-scripts]$
+```
+
+<a name="checking-outputs"></a>
+### 3.5 Checking outputs
+In addition to any output files generated by the commands in a SLURM script, each submitted SLURM script will also generate a .log file. These .log files are named according to the ```#SBATCH --output``` command in the SLURM script. By checking a .log file, you can get information about the current status of a running job.
+
+Most importantly, the .log file contains information about any errors encountered during the run. This can be used to fix bugs, and to confirm the validity of results. Some functions will still generate outputs if they encounter an error while running, so it's important to check the .log file to make sure all commands were executed successfully.
+
+<a name="model-pipeline"></a>
+## 4. A model RNAseq analysis pipeline
+This RNAseq analysis pipeline analyzed a subset of samples from the PRJNA549285 bioproject. These samples are listed below.
+
+|#|SRA number|Genotype|Treatment|
+|---|---|---|---|
+|1|SRR9313209|Col-0|Dark 3 days|
+|2|SRR9313210|Col-0|Dark 3 days|
+|3|SRR9313211|Col-0|Dark 3 days|
+|4|SRR9313212|*hy5*|Dark 3 days|
+|5|SRR9313213|*hy5*|Dark 3 days|
+|6|SRR9313214|*hy5*|Dark 3 days|
+|7|SRR9313223|Col-0|Dark 3 days, light 1.5 hrs|
+|8|SRR9313224|Col-0|Dark 3 days, light 1.5 hrs|
+|9|SRR9313225|Col-0|Dark 3 days, light 1.5 hrs|
+|10|SRR9313226|*hy5*|Dark 3 days, light 1.5 hrs|
+|11|SRR9313227|*hy5*|Dark 3 days, light 1.5 hrs|
+|12|SRR9313228|*hy5*|Dark 3 days, light 1.5 hrs|
+
+A basic RNAseq analysis pipeline has 5 steps:
+1) Downloading/uploading data into hipergator. This data includes: \
+   a) Raw Illumina reads (.fastq or .fq) \
+   b) A reference genome (.fasta or .fa) and annotations (.gff or .gtf)
+2) Removing adapters and trimming low quality bases from reads
+3) Alignment of prepared reads to reference genome
+4) Counting of reads which aligned to genomic features (i.e. genes)
+5) Differential expression analysis
+
+In this workflow, these steps are broken up into several SLURM files. Following is a description of the procedure that can be used to recreate this analysis pipeline on your own hipergator account.
