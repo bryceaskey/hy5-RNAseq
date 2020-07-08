@@ -149,12 +149,12 @@ To load the SRA toolkit, first check which version are available on hipergator w
      Other possible modules matches:
         transrate  yasra
 
--------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
   To find other possible module matches execute:
 
       $ module -r spider '.*sra.*'
 
--------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
   For detailed information about a specific "sra" package (including how to load the modules) use the
   module's full name.
   Note that names that have a trailing (E) are extensions provided by other modules.
