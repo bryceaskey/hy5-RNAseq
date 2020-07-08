@@ -36,7 +36,8 @@ Topics covered:
    2.2 [Bash basics](#bash-basics) \
    2.3 [Output files](#output-files)
 3. [Downloading datasets](#downloading-datasets) \
-   3.1 [Configuring the SRA toolkit](#configuring-sra-toolkit)
+   3.1 [Loading the SRA tookit](#loading-sra-toolkit) \
+   3.2 [Configuring the SRA toolkit](#configuring-sra-toolkit)
 
 <a name="setting-up-hipergator"></a>
 ## 1. Setting up a hipergator account
@@ -127,7 +128,85 @@ You can upload files to hipergator by selecting and dragging them from your comp
 
 <a name="downloading-datasets"></a>
 ## 3. Downloading datasets
+Most datasets available in the NCBI Sequencing Read Archive (SRA) can be downloaded directly into hipergator. This is much faster than downloading the dataset onto your own computer, and then uploading it from your own computer to hipergator. Downloading data directly into hipergator is done with the **SRA toolkit**.
+
+<a name="loading-sra-tookit"></a>
+### 3.1 Loading the SRA toolkit
+To load the SRA toolkit, first check which version are available on hipergator with the ```module spider``` command. On the SSH command line, type the command ```module spider sra```, and press enter. You should see an output similar to that shown below.
+
+```
+[braskey@login3 ~]$ module spider sra
+
+-------------------------------------------------------------------------------------------------------------
+  sra:
+-------------------------------------------------------------------------------------------------------------
+    Description:
+      short read archive toolkit
+
+     Versions:
+        sra/2.10.3
+        sra/2.10.4
+     Other possible modules matches:
+        transrate  yasra
+
+-------------------------------------------------------------------------------------------------------------
+  To find other possible module matches execute:
+
+      $ module -r spider '.*sra.*'
+
+-------------------------------------------------------------------------------------------------------------
+  For detailed information about a specific "sra" package (including how to load the modules) use the
+  module's full name.
+  Note that names that have a trailing (E) are extensions provided by other modules.
+  For example:
+
+     $ module spider sra/2.10.4
+-------------------------------------------------------------------------------------------------------------
+
+
+
+[braskey@login3 ~]$
+```
+
+The ```module spider``` command returns information about all modules with names matching that of the input. From the output of this command, I can see that the most recent version of the SRA toolkit is 2.10.4 (at the time of writing this). The output of this command also tells me that I can view more detailed information about a specific version of the toolkit with the command ```module spider sra/2.10.4```. The output of this command is shown below.
+
+```
+[braskey@login3 ~]$ module spider sra/2.10.4
+
+-------------------------------------------------------------------------------------------------------------
+  sra: sra/2.10.4
+-------------------------------------------------------------------------------------------------------------
+    Description:
+      short read archive toolkit
+
+
+    This module can be loaded directly: module load sra/2.10.4
+
+    Help:
+          SRA is the NCBI Short Read Archive toolkit. The toolkit generates loading
+          and dumping tools with their respective libraries for building new and
+          accessing existing runs.
+
+          The online documentation is located at https://github.com/ncbi/sra-tools/wiki
+
+          This module sets the following environment variables:
+              * HPC_SRA_DIR - location of the installation directory
+              * HPC_SRA_BIN - location of the executables directory
+              * HPC_SRA_DOC - location of the documentation directory
+
+          Reference: https://help.rc.ufl.edu/doc/SRA
+
+      Version 2.10.4
+
+
+
+
+
+[braskey@login3 ~]$
+```
+
+From this output, I see that I can load the SRA toolkit with the command ```module load sra/2.10.4```. Entering this command doesn't generate any visible output, but it loads the SRA toolkit module into my current session, and makes it available for me to use.
 
 <a name="configuring-sra-tookit"></a>
-### 3.1 Configuring the SRA toolkit
-
+### 3.2 Configuring the SRA toolkit
+If this is the first time you are using the SRA toolkit from your hipergator account, it must first be configured. 
