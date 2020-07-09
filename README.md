@@ -40,7 +40,13 @@ The documentation in this section details the bioinformatics approaches and meth
    3.3 [Anatomy of a SLURM script](#slurm-script) \
    3.4 [Running a slurm script](#running-slurm-script) \
    3.5 [Checking outputs](#checking-outputs)
-4. [A model RNAseq analysis pipeline](#model-pipeline)
+4. [A model RNAseq analysis pipeline](#model-pipeline) \
+   4.1 [Copy data and SLURM scripts from shared folder](#copy-data) \
+   4.2 [Download RNAseq data with the ```download-data.sh``` SLURM script](#download-data) \
+   4.3 [Trim and filter reads with the ```trim-reads.sh``` SLURM script](#trim-reads) \
+   4.4 [Align reads to the TAIR10 reference genome with the ```align-reads.sh``` SLURM script](#align-reads) \
+   4.5 [Generate gene expression counts with the ```count-expression.sh``` SLURM script](#generate-counts) \
+   4.6 [Perform a differential expression analysis with the ```DEG-analysis.R``` script](#deg-analysis)
 
 <a name="setting-up-hipergator"></a>
 ## 1. Setting up a hipergator account
@@ -347,7 +353,7 @@ This RNAseq analysis pipeline analyzed a subset of samples from the PRJNA549285 
 |11|SRR9313227|*hy5*|Dark 3 days, light 1.5 hrs|
 |12|SRR9313228|*hy5*|Dark 3 days, light 1.5 hrs|
 
-A basic RNAseq analysis pipeline has 5 steps:
+**A basic RNAseq analysis pipeline has 5 steps:**
 1) Downloading/uploading data into hipergator. This data includes: \
    a) Raw Illumina reads (.fastq or .fq) \
    b) A reference genome (.fasta or .fa) and annotations (.gff or .gtf)
@@ -358,6 +364,7 @@ A basic RNAseq analysis pipeline has 5 steps:
 
 In this workflow, these steps are broken up into several SLURM files. Following is a description of the procedure that can be used to recreate this analysis pipeline on your own hipergator account.
 
+<a name="copy-data"></a>
 ### 4.1 Copy data and SLURM scripts from shared folder
 There are several SLURM scripts and data files in the directory ```/ufrc/jkim6/share/labmtg_20200709/```. You can view them with your SFTP client. From the SSH command line, copy the ```labmtg_20200709/``` directory and its contents into your own ufrc personal folder with the ``cp`` command. Use the ```-r``` flag so that all files contained by the directory are copied!
 
@@ -366,6 +373,7 @@ Your command should look similar to (but not the same as) below:
 [braskey@login4 ~]$ cp -r /ufrc/jkim6/share/labmtg_20200709 /ufrc/jkim6/share/braskey/labmtg_20200709
 ```
 
+<a name="download-data"></a>
 ### 4.2 Download RNAseq data with the ```download-data.sh``` SLURM script
 In the ```labmtg_20200709/slurm-scripts``` folder that you copied, there is a file named ```download-data.sh```. Navigate to this file using the SFTP. To modify this file, you can either: download it onto your own computer, edit it there, and reupload it to hipergator **OR** edit it using your SFTP's built-in text editor. *(For smaller edits like the ones needed here, I find it's easier to use the latter method.)*
 
@@ -385,6 +393,7 @@ The script is now ready for submission! To submit the script as a job, navigate 
 
 After the job has finished, check that there weren't any errors by looking at the log file with your SFTP. The log file will be generated in the same directory as the script. You should use your SFTP to check that the data files are present in the directory that you specified.
 
+<a name="trim-reads"></a>
 ### 4.3 Trim and filter reads with the ```trim-reads.sh``` SLURM script
 The ```trim-reads.sh``` script uses the AdapterRemoval module to trim adapter sequences from reads, and filter out low quality reads. This step is necessary because adapter sequences and low quality reads can interefere with alignment of reads.
 
@@ -400,6 +409,7 @@ The script is now ready for submission! To submit the script as a job, navigate 
 
 After the job has finished, check that there weren't any errors by looking at the log file with your SFTP. You should also check that the trimmed .fastq files are present in the directory that you specified.
 
+<a name="align-reads"></a>
 ### 4.4 Align reads to the TAIR10 reference genome with the ```align-reads.sh``` SLURM script
 The ```align-reads.sh``` script uses the HISAT2 module to align the trimmed and filtered reads to the reference genome. Aligning reads back to a reference genome allows us to determine the locations in the genome which the reads came from. Prior to alignment, an index must be generated from the reference genome. This index is a set of files which contain the same information as the reference .fasta file, but formatted and sorted in a way that allows for more time-efficient alignment.
 
@@ -419,6 +429,7 @@ The script is now ready for submission! To submit the script as a job, navigate 
 
 After the job has finished, check that there weren't any errors by looking at the log file with your SFTP. You should also check that the .sam alignment files are present in the directory that you specified.
 
+<a name="generate-counts"></a>
 ### 4.5 Generate gene expression counts with the ```count-expression.sh``` SLURM script
 The ```count-expression.sh``` script takes the reads that were mapped to the reference genome, and counts the number of reads that were mapped to each genomic feature (i.e. gene). This requires a .gff or .gtf annotation file, which specifies the locations of genes in the reference genome.
 
@@ -438,6 +449,7 @@ The script is now ready for submission! To submit the script as a job, navigate 
 
 After the job has finished, check that there weren't any errors by looking at the log file with your SFTP. You should also check that the expression count files are present in the directory that you specified. There should also be a file in this directory called "gene-lengths.txt" which contains gene length data, as well as a subfolder in called "just-counts" which contains only the expression count data of each gene.
 
+<a name="deg-analysis"></a>
 ### 4.6 Perform a differential expression analysis with the ```DEG-analysis.R``` script
 The ```DEG-analysis.R``` script uses the edgeR package to generate normalized expression counts (e.g. RPKM, FPKM). The normalized counts from different sample groups can be compared to each other, allowing for the identification of differentially expressed genes.
 
