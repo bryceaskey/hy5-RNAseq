@@ -244,13 +244,13 @@ In the SSH client, after loading the SRA toolkit module into your current sessio
 Here are the settings that need to be changed in the configuation tool:
 1) On the "Main" tab, check the "Enable Remote Access" box.
 
-![Image of SRA configuration tool - setting to enable remote access is checked](doc-images/sra-config-remote-access.png)
+![Image of SRA configuration tool - setting to enable remote access is checked](doc-images/sra-config-remote-access.PNG)
 
 *SRA configuation tool with "Enable Remote Access" setting checked.*
 
 2) On the "Cache" tab, check the "enable local file-caching" box, and set "location of user-repository" to the "sra-cache" folder you created in your ufrc directory.
 
-![Image of SRA configuration tool - setting to enable local file-caching is checked, and location of user-repository is set](doc-images/sra-config-cache.png)
+![Image of SRA configuration tool - setting to enable local file-caching is checked, and location of user-repository is set](doc-images/sra-config-cache.PNG)
 
 *SRA configuation tool with "enable local file-caching" setting checked, and "location of user-repository" set to an empty folder in my ufrc directory.*
 
