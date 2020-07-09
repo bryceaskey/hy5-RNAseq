@@ -9,13 +9,13 @@ BiocManager::install("edgeR")
 library(edgeR)
 
 # Specify paths to data files
-justCounts <- "..."
-geneLengths <- "..."
+justCounts <- "C:/Users/Bryce/Documents/hy5-RNAseq/labmtg_20200709/data/counts/"
+geneLengths <- "C:/Users/Bryce/Documents/hy5-RNAseq/labmtg_20200709/data/gene-lengths.txt"
 
 # Load gene expression and gene length data
 expressionData <- readDGE(paste(justCounts, dir(justCounts), sep=""),
   labels=sapply(strsplit(dir(justCounts), "-"), `[`, 1),
-  group=c(...))
+  group=c(1,1,1,2,2,2))
 expressionData$genes <- read.delim(geneLengths, row.names=1)
 
 # Only keep genes with cpm > 1 in at least two samples

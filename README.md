@@ -393,6 +393,8 @@ The script is now ready for submission! To submit the script as a job, navigate 
 
 After the job has finished, check that there weren't any errors by looking at the log file with your SFTP. The log file will be generated in the same directory as the script. You should use your SFTP to check that the data files are present in the directory that you specified.
 
+*Note: I have been having some problems with ```fastq-dump``` randomly crashing with an Error code 3. To download data for any samples which cause this error, I've found that I can run ```fastq-dump``` directly on the SSH command line without any problems.*
+
 <a name="trim-reads"></a>
 ### 4.3 Trim and filter reads with the ```trim-reads.sh``` SLURM script
 The ```trim-reads.sh``` script uses the AdapterRemoval module to trim adapter sequences from reads, and filter out low quality reads. This step is necessary because adapter sequences and low quality reads can interefere with alignment of reads.

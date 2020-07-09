@@ -22,5 +22,5 @@ do
   # Apply AdapterRemoval to remove adapter sequences and filter low quality reads
   AdapterRemoval --file1 ${reads}${id}.fastq \
     --basename ${reads}${id} --output1 ${reads}${id}_trimmed.fastq \
-    --trimns --trimqualities --minlength 80
+    --trimns --trimqualities --minlength 36
 done
