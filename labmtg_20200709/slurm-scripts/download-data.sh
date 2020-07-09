@@ -15,9 +15,10 @@ module load sra/2.10.4
 
 echo 'Downloading arabidopsis RNA seq data'
 
-dest=/ufrc/jkim6/...
+reads=/ufrc/jkim6/...
+mkdir -p ${reads}
 
 for id in ...
 do
-  fastq-dump ${id} -O ${dest}
+  fastq-dump ${id} -O ${reads}
 done
