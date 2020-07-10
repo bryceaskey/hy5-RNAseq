@@ -379,14 +379,12 @@ In the ```labmtg_20200709/slurm-scripts``` folder that you copied, there is a fi
 
 There are 3 places in the script marked with "..." where edits need to be made:
 
-On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
-
-On line 18, edit ```reads=/ufrc/jkim6/...``` to specify the directory into which RNAseq .fastq files will be downloaded.
-
-On line 21, edit ```for id in ...``` to specify the SRA numbers of the samples you want to download data for. For example, if I wanted to download data for SRR9313209, SRR9313210, and SRR9313211, I would modify this line to:
+1) On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
+2) On line 18, edit ```reads=/ufrc/jkim6/...``` to specify the directory into which RNAseq .fastq files will be downloaded.
+3) On line 21, edit ```for id in ...``` to specify the SRA numbers of the samples you want to download data for. For example, if I wanted to download data for SRR9313209, SRR9313210, and SRR9313211, I would modify this line to:
 
 ```
-for id in SRR9313209 SRR9313210 SRR9313211
+     for id in SRR9313209 SRR9313210 SRR9313211
 ```
 
 The script is now ready for submission! To submit the script as a job, navigate to its location with your SSH, and submit it with the ```sbatch``` command.
@@ -399,13 +397,11 @@ After the job has finished, check that there weren't any errors by looking at th
 ### 4.3 Trim and filter reads with the ```trim-reads.sh``` SLURM script
 The ```trim-reads.sh``` script uses the AdapterRemoval module to trim adapter sequences from reads, and filter out low quality reads. This step is necessary because adapter sequences and low quality reads can interefere with alignment of reads.
 
-Similar to the ```download-data.sh``` script, there are several lines in the ```trim-reads.sh``` script which need to be edited.
+Similar to the ```download-data.sh``` script, there are several lines in the ```trim-reads.sh``` script which need to be edited:
 
-On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
-
-On line 18, edit ```reads=/ufrc/jkim6/...``` to specify the directory into which RNAseq .fastq files were previously downloaded. This will also be the directory in which new trimmed .fastq files are saved.
-
-On line 20, edit ```for id in ...``` to specify the SRA numbers of the samples which you downloaded data for in the previous step.
+1) On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
+2) On line 18, edit ```reads=/ufrc/jkim6/...``` to specify the directory into which RNAseq .fastq files were previously downloaded. This will also be the directory in which new trimmed .fastq files are saved.
+3) On line 20, edit ```for id in ...``` to specify the SRA numbers of the samples which you downloaded data for in the previous step.
 
 The script is now ready for submission! To submit the script as a job, navigate to its location with your SSH, and submit it with the ```sbatch``` command.
 
@@ -415,17 +411,13 @@ After the job has finished, check that there weren't any errors by looking at th
 ### 4.4 Align reads to the TAIR10 reference genome with the ```align-reads.sh``` SLURM script
 The ```align-reads.sh``` script uses the HISAT2 module to align the trimmed and filtered reads to the reference genome. Aligning reads back to a reference genome allows us to determine the locations in the genome which the reads came from. Prior to alignment, an index must be generated from the reference genome. This index is a set of files which contain the same information as the reference .fasta file, but formatted and sorted in a way that allows for more time-efficient alignment.
 
-Same as previously, there are several lines in the ```align-reads.sh``` script which need to be edited.
+Same as previously, there are several lines in the ```align-reads.sh``` script which need to be edited:
 
-On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
-
-On line 18, edit ```index=/ufrc/jkim6/...``` to specify the directory which contains the reference TAIR10.fasta file. The index will generated in the same directory.
-
-On line 19, edit ```reads=/ufrc/jkim6/...``` to specify the directory which contains the trimmed and filtered reads generated in the previous step.
-
-On line 20, edit ```aln=/ufrc/jkim6/...``` to specify the directory in which output alignment files will be saved.
-
-On line 26, edit ```for id in ...``` to specify the SRA numbers of the samples which you trimmed and filtered the reads of in the previous step.
+1) On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
+2) On line 18, edit ```index=/ufrc/jkim6/...``` to specify the directory which contains the reference TAIR10.fasta file. The index will generated in the same directory.
+3) On line 19, edit ```reads=/ufrc/jkim6/...``` to specify the directory which contains the trimmed and filtered reads generated in the previous step.
+4) On line 20, edit ```aln=/ufrc/jkim6/...``` to specify the directory in which output alignment files will be saved.
+5) On line 26, edit ```for id in ...``` to specify the SRA numbers of the samples which you trimmed and filtered the reads of in the previous step.
 
 The script is now ready for submission! To submit the script as a job, navigate to its location with your SSH, and submit it with the ```sbatch``` command.
 
@@ -435,17 +427,13 @@ After the job has finished, check that there weren't any errors by looking at th
 ### 4.5 Generate gene expression counts with the ```count-expression.sh``` SLURM script
 The ```count-expression.sh``` script takes the reads that were mapped to the reference genome, and counts the number of reads that were mapped to each genomic feature (i.e. gene). This requires a .gff or .gtf annotation file, which specifies the locations of genes in the reference genome.
 
-Same as previously, there are several lines in the ```count-expression.sh``` script which need to be edited.
+Same as previously, there are several lines in the ```count-expression.sh``` script which need to be edited:
 
-On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
-
-On line 18, edit ```aln=/ufrc/jkim6/...``` to specify the directory in which .sam alignment files are saved.
-
-On line 19, edit ```index=/ufrc/jkim6/...``` to specify the directory which contains the TAIR10.gff annotation file. Unless it has been moved, it will be in the same directory as the HISAT2 index.
-
-On line 20, edit ```counts=/ufrc/jkim6/...``` to specify the directory in which the expression count files will be saved.
-
-On line 24, edit ```for id in ...``` to specify the SRA numbers of the samples which you have generated .sam alignment files for in the previous step.
+1) On line 4, edit ```#SBATCH --mail-user=...@ufl.edu``` to specify your ufl email.
+2) On line 18, edit ```aln=/ufrc/jkim6/...``` to specify the directory in which .sam alignment files are saved.
+3) On line 19, edit ```index=/ufrc/jkim6/...``` to specify the directory which contains the TAIR10.gff annotation file. Unless it has been moved, it will be in the same directory as the HISAT2 index.
+4) On line 20, edit ```counts=/ufrc/jkim6/...``` to specify the directory in which the expression count files will be saved.
+5) On line 24, edit ```for id in ...``` to specify the SRA numbers of the samples which you have generated .sam alignment files for in the previous step.
 
 The script is now ready for submission! To submit the script as a job, navigate to its location with your SSH, and submit it with the ```sbatch``` command.
 
@@ -459,15 +447,13 @@ Because the gene expression count files are quite small, they can be downloaded 
 
 Using your SFTP, download the gene expression count files that are saved in the "just-counts" subfolder of the "counts" directory you specified previously. For ease of downstream processing, these files should be saved in a folder by themselves. Also download the "gene-lengths.txt" file from the "counts" directory. And finally, download the ```DEG-analysis.R``` script, which is in the "R-scripts" subdirectory of "labmtg_20200709".
 
-Open the ```DEG-analysis.R``` script in RStudio, and make the following edits.
+Open the ```DEG-analysis.R``` script in RStudio, and make the following edits:
 
-On line 12, edit ```justCounts <- "..."``` to specify the directory which contains the gene expression count files.
-
-On line 13, edit ```geneLengths <- "..."``` to specify the full path to the "gene-lengths.txt" file.
-
-On line 18, edit ```group=c(...))``` to specify which experimental group each sample belongs to. Group identity should be indicated with a single integer. As R will read the gene expression count files in ascending numerical order, group identities should be listed to match this order. For example, say I'm processing the following files: SRR9313209-counts.txt, SRR9313210-counts.txt, SRR9313223-counts.txt, and SRR9313224-counts.txt. To reflect the experimental groups that these samples belong to, I would assign groups with the following command:
+1) On line 12, edit ```justCounts <- "..."``` to specify the directory which contains the gene expression count files.
+2) On line 13, edit ```geneLengths <- "..."``` to specify the full path to the "gene-lengths.txt" file.
+3) On line 18, edit ```group=c(...))``` to specify which experimental group each sample belongs to. Group identity should be indicated with a single integer. As R will read the gene expression count files in ascending numerical order, group identities should be listed to match this order. For example, say I'm processing the following files: SRR9313209-counts.txt, SRR9313210-counts.txt, SRR9313223-counts.txt, and SRR9313224-counts.txt. To reflect the experimental groups that these samples belong to, I would assign groups with the following command:
 ```
-group=c(1,1,2,2))
+     group=c(1,1,2,2))
 ```
 
 The script is now ready to run! The script generates 2 outputs which should have special attention paid to them. 
