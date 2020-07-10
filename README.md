@@ -384,7 +384,7 @@ There are 3 places in the script marked with "..." where edits need to be made:
 3) On line 21, edit ```for id in ...``` to specify the SRA numbers of the samples you want to download data for. For example, if I wanted to download data for SRR9313209, SRR9313210, and SRR9313211, I would modify this line to:
 
 ```
-     for id in SRR9313209 SRR9313210 SRR9313211
+for id in SRR9313209 SRR9313210 SRR9313211
 ```
 
 The script is now ready for submission! To submit the script as a job, navigate to its location with your SSH, and submit it with the ```sbatch``` command.
@@ -453,7 +453,7 @@ Open the ```DEG-analysis.R``` script in RStudio, and make the following edits:
 2) On line 13, edit ```geneLengths <- "..."``` to specify the full path to the "gene-lengths.txt" file.
 3) On line 18, edit ```group=c(...))``` to specify which experimental group each sample belongs to. Group identity should be indicated with a single integer. As R will read the gene expression count files in ascending numerical order, group identities should be listed to match this order. For example, say I'm processing the following files: SRR9313209-counts.txt, SRR9313210-counts.txt, SRR9313223-counts.txt, and SRR9313224-counts.txt. To reflect the experimental groups that these samples belong to, I would assign groups with the following command:
 ```
-     group=c(1,1,2,2))
+group=c(1,1,2,2))
 ```
 
 The script is now ready to run! The script generates 2 outputs which should have special attention paid to them. 
