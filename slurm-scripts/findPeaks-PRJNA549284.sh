@@ -16,31 +16,38 @@ module load homer/4.10
 echo "Finding peaks from ChIPseq data for PRJNA549284"
 
 aln=/blue/jkim6/share/braskey/data/PRJNA549284/HISAT2/
+tags=/blue/jkim6/share/braskey/data/PRJNA549284/tags/
 peaks=/blue/jkim6/share/braskey/data/PRJNA549284/peaks/
 
-# hy5
-findPeaks ${aln}SRR9312923.sam -i ${aln}SRR9312922.sam -o ${peaks}hy5_1.txt \
+# Make tag directories for all samples
+for id in SRR9312923 SRR9312924 SRR10811458 SRR9312925 SRR9312926 SRR10811459 SRR9312927 SRR9312928 SRR9312922 SRR10811456 SRR10811457
+do
+  makeTagDirectory ${tags}${id}/ ${aln}${id}.sam
+done
+
+# hy5 peak identification
+findPeaks ${tags}SRR9312923/ -i ${tags}SRR9312922/ -o ${peaks}hy5_1.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
 
-findPeaks ${aln}SRR9312924.sam -i ${aln}SRR10811456.sam -o ${peaks}hy5_2.txt \
+findPeaks ${tags}SRR9312924/ -i ${tags}SRR10811456/ -o ${peaks}hy5_2.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
 
-findPeaks ${aln}SRR10811458.sam -i ${aln}SRR10811457.sam -o ${peaks}hy5_3.txt \
+findPeaks ${tags}SRR10811458/ -i ${tags}SRR10811457/ -o ${peaks}hy5_3.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
 
-# hy5-VP16
-findPeaks ${aln}SRR9312925.sam -i ${aln}SRR9312922.sam -o ${peaks}hy5-VP16_1.txt \
+# hy5-VP16 peak identification
+findPeaks ${tags}SRR9312925/ -i ${tags}SRR9312922/ -o ${peaks}hy5-VP16_1.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
 
-findPeaks ${aln}SRR9312926.sam -i ${aln}SRR9312922.sam -o ${peaks}hy5-VP16_2.txt \
+findPeaks ${tags}SRR9312926/ -i ${tags}SRR9312922/ -o ${peaks}hy5-VP16_2.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
 
-findPeaks ${aln}SRR10811459.sam -i ${aln}SRR10811457.sam -o ${peaks}hy5-VP16_3.txt \
+findPeaks ${tags}SRR10811459/ -i ${tags}SRR10811457/ -o ${peaks}hy5-VP16_3.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
 
-# hy5-SRDX
-findPeaks ${aln}SRR9312927.sam -i ${aln}SRR9312922.sam -o ${peaks}hy5-SRDX_1.txt \
+# hy5-SRDX peak identification
+findPeaks ${tags}SRR9312927/ -i ${tags}SRR9312922/ -o ${peaks}hy5-SRDX_1.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
 
-findPeaks ${aln}SRR9312928.sam -i ${aln}SRR9312922.sam -o ${peaks}hy5-SRDX_2.txt \
+findPeaks ${tags}SRR9312928/ -i ${tags}SRR9312922/ -o ${peaks}hy5-SRDX_2.txt \
   -style factor -F 3 -P 0.0001 -L 2 -LP 0.001
